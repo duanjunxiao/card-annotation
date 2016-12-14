@@ -16,5 +16,6 @@ Add it in your root build.gradle at the end of repositories:
                 apt 'com.github.duanjunxiao.card-annotation:compiler:v0.0.1'
 	}
 	
-## Step 3. Just to use.@CardMap(User.classs)
+## Step 3. Just to use
+	@CardMap(User.classs)
   
