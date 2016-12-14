@@ -12,10 +12,14 @@ Add it in your root build.gradle at the end of repositories:
 ## Step 2. Add the dependency
 	
 	dependencies {
-		compile 'com.github.duanjunxiao.card-annotation:cardlib:v0.0.1'
-                apt 'com.github.duanjunxiao.card-annotation:compiler:v0.0.1'
+		compile 'com.github.duanjunxiao.card-annotation:cardlib:v0.0.2'
+                apt 'com.github.duanjunxiao.card-annotation:compiler:v0.0.2'
 	}
 	
 ## Step 3. Just to use
-	@CardMap(User.classs)
+	@CardMap(MainCard.class)
+        public class MainActivity ...{
+	   ...
+	}
+	
   
