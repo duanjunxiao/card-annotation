@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.duanjunxiao.lib.annotation.CardMap;
 
-@CardMap(A.class)
+@CardMap(MainCard.class)
 public class MainActivity extends AppCompatActivity {
 
     @Override

@@ -11,7 +11,6 @@ import com.squareup.javapoet.TypeSpec;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -23,9 +22,7 @@ import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
@@ -33,6 +30,7 @@ import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
 public class CardProcessor extends AbstractProcessor {
+
     private Messager mMessager;
     private Filer mFiler;
     private Elements elementUtils;
@@ -69,7 +67,6 @@ public class CardProcessor extends AbstractProcessor {
         } catch (Exception e) {
             error(e.getMessage());
         }
-
         return true;
     }
 
@@ -101,24 +98,17 @@ public class CardProcessor extends AbstractProcessor {
         for (Element element : elements) {
             //CardMap router = element.getAnnotation(CardMap.class);
             AnnotationMirror annotationMirror = getAnnotationMirror(element, CardMap.class);
-            String[] arr = annotationMirror.toString().split("\\u0028");// )
-            Map<? extends ExecutableElement, ? extends AnnotationValue> elementValues = annotationMirror.getElementValues();
-            System.out.println("elementValues = " + elementValues);
-            for (int i = 0; i < arr.length; i++) {
-                System.out.println("aaaaaaaa arr : " + " arr[" + i + "]  " + arr[i]);
+            if (annotationMirror == null) {
+                continue;
             }
-            System.out.println();
+            String[] arr = annotationMirror.toString().split("\\u0028");// )
             String s = arr[1];
-            System.out.println(" aaaaa s = " + s);
-            System.out.println("aaaaaaaa s.substring(0, s.lastIndexOf(.))" + s.substring(0, s.lastIndexOf(".")));
-
-//            routerInitBuilder.addStatement("router.put($S, $T.class)", s.substring(0, s.lastIndexOf(".")), ClassName.get((TypeElement) element));
+            //routerInitBuilder.addStatement("router.put($S, $T.class)", s.substring(0, s.lastIndexOf(".")), ClassName.get((TypeElement) element));
             routerInitBuilder.addStatement("cardNameList.add($S)", s.substring(0, s.lastIndexOf(".")));
             ClassName clazz = ClassName.get((TypeElement) element);
             routerInitBuilder.addStatement("providerNameList.add($S)", clazz.packageName() + "." + clazz.simpleName());
-            System.out.println("aaaaaaa clazz.packageName() + . + clazz.simpleName() " + clazz.packageName() + "." + clazz.simpleName());
-            System.out.println("aaaaaaa clazz.getClass() " + clazz.getClass());
         }
+
         MethodSpec routerInitMethod = routerInitBuilder.build();
         TypeElement routerInitializerType = elementUtils.getTypeElement("com.duanjunxiao.cardlib.ICardMapInitializer");
         return TypeSpec.classBuilder("CardMapInitializer")
@@ -138,10 +128,8 @@ public class CardProcessor extends AbstractProcessor {
         return null;
     }
 
-
     private void error(String error) {
         mMessager.printMessage(Diagnostic.Kind.ERROR, error);
     }
-
 
 }
